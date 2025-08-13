@@ -13,15 +13,28 @@ class GalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Stored Images')),
+      appBar: AppBar(
+        title: Text('Stored Images'),
+        actions: [
+          Obx(
+            () => controller.images.isNotEmpty
+                ? IconButton(
+                    icon: Icon(
+                      controller.isSelectionMode.value
+                          ? Icons.cancel
+                          : Icons.select_all,
+                    ),
+                    onPressed: controller.toggleSelectionMode,
+                  )
+                : SizedBox.shrink(),
+          ),
+        ],
+      ),
       body: Obx(() {
         if (controller.images.isEmpty) {
           return Center(child: Text('No images found'));
         }
-        return ImageGrid(
-          images: controller.images,
-          controller: controller,
-        );
+        return ImageGrid(images: controller.images, controller: controller);
       }),
     );
   }

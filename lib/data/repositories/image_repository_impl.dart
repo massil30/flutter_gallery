@@ -21,4 +21,9 @@ class ImageRepositoryImpl implements ImageRepository {
   Future<String> captureImage() async {
     return await dataSource.captureImage(cameraController);
   }
+
+  @override
+  Future<void> deleteImages(List<String> paths) async {
+    await dataSource.deleteImages(paths);
+  }
 }

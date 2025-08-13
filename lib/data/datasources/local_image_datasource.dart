@@ -12,7 +12,7 @@ class LocalImageDataSource {
         .where((f) => f.path.endsWith('.png'))
         .map((f) => File(f.path))
         .toList();
-    
+
     return files.map((file) => ImageModel.fromFile(file)).toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt)); // newest first
   }
@@ -26,6 +26,15 @@ class LocalImageDataSource {
     await File(image.path).copy(path);
     print("Image saved at: $path");
     return path;
+  }
+
+  Future<void> deleteImages(List<String> paths) async {
+    for (final path in paths) {
+      final file = File(path);
+      if (await file.exists()) {
+        await file.delete();
+      }
+    }
   }
 
   Future<String> _getAppDocumentsPath() async {

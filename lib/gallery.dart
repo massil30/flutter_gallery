@@ -23,7 +23,11 @@ class _TakeIDCardPictureState extends State<TakeIDCardPicture> {
 
   Future<void> initCamera() async {
     cameras = await availableCameras();
-    controller = CameraController(cameras![0], ResolutionPreset.high);
+    controller = CameraController(
+      cameras![0],
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
     await controller!.initialize();
     setState(() {
       isCameraReady = true;
@@ -42,6 +46,7 @@ class _TakeIDCardPictureState extends State<TakeIDCardPicture> {
   }
 
   Future<void> captureImage() async {
+    setState(() {});
     final dirPath = await _getAppDocumentsPath();
     final fileName = 'idcard_${DateTime.now().millisecondsSinceEpoch}.png';
     final path = join(dirPath, fileName);

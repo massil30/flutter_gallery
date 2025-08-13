@@ -15,6 +15,8 @@ class ImageController extends GetxController {
   final isCameraReady = false.obs;
   final selectedImages = <String>[].obs;
   final isSelectionMode = false.obs;
+  final capturedImagePath = RxnString();
+  final isReviewMode = false.obs;
 
   CameraController? cameraController;
   List<CameraDescription>? cameras;
@@ -48,9 +50,46 @@ class ImageController extends GetxController {
     images.value = imageEntities;
   }
 
-  Future<void> captureImage() async {
-    await captureImageUseCase();
+  Future<String> takePicture() async {
+    final path = await captureImageUseCase();
+    capturedImagePath.value = path;
+    isReviewMode.value = true;
+    return path;
+  }
+
+  Future<void> validateImage() async {
+    // Image is already saved, just need to update the list
     await loadImages();
+    Get.defaultDialog(
+      title: "Succès",
+      middleText: 'Pecture officialy Saved',
+      titleStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+      middleTextStyle: TextStyle(fontSize: 16),
+      backgroundColor: Colors.white,
+      radius: 12,
+      confirm: ElevatedButton(
+        onPressed: () {
+          Get.back(); // close dialog
+        },
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+        child: Text("OK", style: TextStyle(color: Colors.white)),
+      ),
+    );
+    // Reset review mode
+    isReviewMode.value = false;
+    capturedImagePath.value = null;
+  }
+
+  void retakeImage() {
+    // Discard the current image and go back to camera
+    if (capturedImagePath.value != null) {
+      final file = File(capturedImagePath.value!);
+      if (file.existsSync()) {
+        file.deleteSync();
+      }
+    }
+    isReviewMode.value = false;
+    capturedImagePath.value = null;
   }
 
   File getFileFromEntity(ImageEntity entity) {

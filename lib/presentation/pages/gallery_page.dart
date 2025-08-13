@@ -14,7 +14,7 @@ class GalleryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stored Images'),
+        title: Text('Gallery'),
         actions: [
           Obx(
             () => controller.images.isNotEmpty

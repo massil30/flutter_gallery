@@ -1,25 +1,36 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../controllers/image_controller.dart';
 import '../widgets/overlays/camera_overlay.dart';
 import 'gallery_page.dart';
 
-class CameraPage extends StatelessWidget {
+class CarPectures extends StatelessWidget {
   final ImageController controller = Get.find<ImageController>();
 
-  CameraPage({Key? key}) : super(key: key);
+  CarPectures({Key? key}) : super(key: key);
 
   void navigateToGallery() {
     Get.to(() => GalleryPage());
   }
 
+  final List<Map<String, String>> carOptions = [
+    {'label': 'Arrière', 'image': 'assets/car.png'},
+    {'label': 'Gauche', 'image': 'assets/car.png'},
+    {'label': 'Droite', 'image': 'assets/car.png'},
+    {'label': 'Avant', 'image': 'assets/car.png'},
+  ];
+
+  // Track selected index
+  final RxInt selectedIndex = 0.obs;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Take ID Card Picture'),
+        title: Text('Take Car Picture'),
         actions: [
           IconButton(
             icon: Icon(Icons.photo_library),
@@ -46,11 +57,36 @@ class CameraPage extends StatelessWidget {
             CameraPreview(controller.cameraController!),
 
             // Mask Overlay
-            const CameraOverlay(),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: MediaQuery.of(context).size.height * 0.1,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(carOptions.length, (index) {
+                    final option = carOptions[index];
+                    return GestureDetector(
+                      onTap: () {
+                        selectedIndex.value = index; // update selection
+                      },
+                      child: Obx(
+                        () => buildCarOption(
+                          option['label']!,
+                          option['image']!,
+                          context,
+                          isSelected: selectedIndex.value == index,
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ),
 
             // Capture Button
             Positioned(
-              bottom: 30,
+              bottom: 15,
               left: 0,
               right: 0,
               child: Center(
@@ -64,6 +100,46 @@ class CameraPage extends StatelessWidget {
           ],
         );
       }),
+    );
+  }
+
+  Widget buildCarOption(
+    String label,
+    String imagePath,
+    BuildContext context, {
+    bool isSelected = false,
+  }) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      width: MediaQuery.of(context).size.height * 0.17,
+      height: MediaQuery.of(context).size.height * 0.2,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isSelected
+              ? Colors.green
+              : const Color.fromARGB(255, 219, 221, 216),
+          width: 3, // thicker border when selected
+        ),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      padding: EdgeInsets.all(8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(imagePath, width: 40, height: 40, fit: BoxFit.contain),
+          SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: isSelected ? Colors.green : Colors.black,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gallery/homepage.dart';
+import 'package:flutter_gallery/presentation/pages/car_images.dart';
 import 'package:get/get.dart';
 import 'package:camera/camera.dart';
 import 'data/datasources/local_image_datasource.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         future: _initializeController(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPage();
+            return CarPectures();
           }
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),

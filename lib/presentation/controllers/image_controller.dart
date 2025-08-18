@@ -67,6 +67,24 @@ class ImageController extends GetxController {
     return path;
   }
 
+  // Delete selected images
+  Future<void> deleteSelectedImages(List<String> paths) async {
+    try {
+      // Call the DeleteImages use case
+      await deleteImagesUseCase.delete(paths);
+      //After deleting images Load them again to not remove the previous once
+      await loadImages();
+      //Clear the previous list
+      selectedImages.clear();
+      if (images.isEmpty) {
+        isSelectionMode.value = false;
+      }
+    } catch (e) {
+      // Handle errors if needed
+      print("Error deleting images: $e");
+    }
+  }
+
   Future<void> validateImage() async {
     // Image is already saved, just need to update the list
     await loadImages();
@@ -127,24 +145,6 @@ class ImageController extends GetxController {
       selectedImages.remove(path);
     } else {
       selectedImages.add(path);
-    }
-  }
-
-  // Delete selected images
-  Future<void> deleteSelectedImages(List<String> paths) async {
-    try {
-      // Call the DeleteImages use case
-      await deleteImagesUseCase.delete(paths);
-      //After deleting images Load them again to not remove the previous once
-      await loadImages();
-      //Clear the previous list
-      selectedImages.clear();
-      if (images.isEmpty) {
-        isSelectionMode.value = false;
-      }
-    } catch (e) {
-      // Handle errors if needed
-      print("Error deleting images: $e");
     }
   }
 }

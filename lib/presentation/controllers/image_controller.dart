@@ -6,11 +6,15 @@ import 'package:get/get.dart';
 import '../../domain/entities/image_entity.dart';
 import '../../domain/usecases/capture_image.dart';
 import '../../domain/usecases/get_images.dart';
+import '../../domain/usecases/delete_images.dart';
 
 class ImageController extends GetxController {
+  // Use Cases
   final GetImages getImagesUseCase;
   final CaptureImage captureImageUseCase;
+  final DeleteImages deleteImagesUseCase;
 
+  //State
   final images = <ImageEntity>[].obs;
   final isCameraReady = false.obs;
   final selectedImages = <String>[].obs;
@@ -18,26 +22,31 @@ class ImageController extends GetxController {
   final capturedImagePath = RxnString();
   final isReviewMode = false.obs;
 
+  // Camera
   CameraController? cameraController;
   List<CameraDescription>? cameras;
 
   ImageController({
     required this.getImagesUseCase,
     required this.captureImageUseCase,
+    required this.deleteImagesUseCase,
   });
-
+  // Handle Camera LifeCycle
+  // Oninit
   @override
   void onInit() {
     super.onInit();
     initCamera();
   }
 
+  //onClose
   @override
   void onClose() {
     cameraController?.dispose();
     super.onClose();
   }
 
+  //Lunch Camera Function
   Future<void> initCamera() async {
     cameras = await availableCameras();
     cameraController = CameraController(cameras![0], ResolutionPreset.high);
@@ -45,6 +54,7 @@ class ImageController extends GetxController {
     isCameraReady.value = true;
   }
 
+  //Load Images
   Future<void> loadImages() async {
     final imageEntities = await getImagesUseCase();
     images.value = imageEntities;
@@ -121,14 +131,20 @@ class ImageController extends GetxController {
   }
 
   // Delete selected images
-  Future<void> deleteSelectedImages() async {
-    if (selectedImages.isEmpty) return;
-
-    await Get.find<ImageRepositoryImpl>().deleteImages(selectedImages.toList());
-    await loadImages();
-    selectedImages.clear();
-    if (images.isEmpty) {
-      isSelectionMode.value = false;
+  Future<void> deleteSelectedImages(List<String> paths) async {
+    try {
+      // Call the DeleteImages use case
+      await deleteImagesUseCase.delete(paths);
+      //After deleting images Load them again to not remove the previous once
+      await loadImages();
+      //Clear the previous list
+      selectedImages.clear();
+      if (images.isEmpty) {
+        isSelectionMode.value = false;
+      }
+    } catch (e) {
+      // Handle errors if needed
+      print("Error deleting images: $e");
     }
   }
 }

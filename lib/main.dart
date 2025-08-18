@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gallery/domain/usecases/delete_images.dart';
 import 'package:flutter_gallery/homepage.dart';
 import 'package:flutter_gallery/presentation/pages/car_images.dart';
 import 'package:get/get.dart';
@@ -60,12 +61,14 @@ class MyApp extends StatelessWidget {
     // Setup use cases
     final getImages = GetImages(repository);
     final captureImage = CaptureImage(repository);
+    final deleteImages = DeleteImages(repository);
 
     // Register controller
     Get.put(
       ImageController(
         getImagesUseCase: getImages,
         captureImageUseCase: captureImage,
+        deleteImagesUseCase: deleteImages,
       ),
     );
   }

@@ -93,7 +93,7 @@ class CarPectures extends StatelessWidget {
                 child: FloatingActionButton(
                   backgroundColor: Colors.green,
                   onPressed: controller.takePicture,
-                  child: Icon(Icons.camera_alt),
+                  child: Icon(Icons.camera_alt, color: Colors.white),
                 ),
               ),
             ),

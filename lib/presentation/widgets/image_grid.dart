@@ -199,7 +199,9 @@ class ImageGrid extends StatelessWidget {
                           child: Text('Delete'),
                           onPressed: () {
                             Get.back();
-                            controller.deleteSelectedImages();
+                            controller.deleteSelectedImages(
+                              controller.selectedImages,
+                            );
                           },
                         ),
                       ],

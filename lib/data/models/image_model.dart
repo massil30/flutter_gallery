@@ -8,15 +8,15 @@ class ImageModel extends ImageEntity {
     required DateTime createdAt,
     int? width,
     int? height,
-  }) : super(path: path, createdAt: createdAt, );
+  }) : super(path: path, createdAt: createdAt);
 
+  // Get Path and Create we get Dimensions when we want to display
   factory ImageModel.fromFile(File file) {
     final fileName = file.path.split('/').last;
     final timestamp =
         int.tryParse(fileName.split('_').last.split('.').first) ??
         DateTime.now().millisecondsSinceEpoch;
 
-    // We'll get the actual dimensions when displaying the image
     return ImageModel(
       path: file.path,
       createdAt: DateTime.fromMillisecondsSinceEpoch(timestamp),

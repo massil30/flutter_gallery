@@ -3,6 +3,8 @@ import 'package:flutter_gallery/domain/usecases/delete_images.dart';
 import 'package:flutter_gallery/homepage.dart';
 import 'package:flutter_gallery/presentation/pages/car_images.dart';
 import 'package:flutter_gallery/presentation/pages/gallery_page.dart';
+import 'package:flutter_gallery/presentation/widgets/overlays/cart_overlay.dart';
+import 'package:flutter_gallery/presentation/widgets/overlays/grise_overlay.dart';
 import 'package:get/get.dart';
 import 'package:camera/camera.dart';
 import 'data/datasources/local_image_datasource.dart';
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
         future: _initializeController(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return GalleryPage();
+            return CameraPage(widget: GrisOverlay());
           }
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),

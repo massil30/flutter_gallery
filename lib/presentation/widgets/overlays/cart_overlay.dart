@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-class CameraOverlay extends StatelessWidget {
-  const CameraOverlay({Key? key}) : super(key: key);
+// Carte Identité + Permis de conduire Overlay
+class CartOverlay extends StatelessWidget {
+  const CartOverlay({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,10 @@ class CameraOverlay extends StatelessWidget {
                 width: 300,
                 height: 200,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.green, width: 3),
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 199, 243, 201),
+                    width: 3,
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),

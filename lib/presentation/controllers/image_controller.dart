@@ -56,7 +56,7 @@ class ImageController extends GetxController {
 
   //Load Images
   Future<void> loadImages() async {
-    final imageEntities = await getImagesUseCase();
+    final List<ImageEntity> imageEntities = await getImagesUseCase();
     images.value = imageEntities;
   }
 

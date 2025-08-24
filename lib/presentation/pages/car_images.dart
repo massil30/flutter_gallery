@@ -4,7 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../controllers/image_controller.dart';
-import '../widgets/overlays/camera_overlay.dart';
+import '../widgets/overlays/cart_overlay.dart';
 import 'gallery_page.dart';
 
 class CarPectures extends StatelessWidget {

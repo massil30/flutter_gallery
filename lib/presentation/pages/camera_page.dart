@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import '../controllers/image_controller.dart';
-import '../widgets/overlays/camera_overlay.dart';
+import '../widgets/overlays/cart_overlay.dart';
 import 'gallery_page.dart';
 
 class CameraPage extends StatelessWidget {
+  final Widget widget;
   final ImageController controller = Get.find<ImageController>();
 
-  CameraPage({Key? key}) : super(key: key);
+  CameraPage({Key? key, required this.widget}) : super(key: key);
 
   void navigateToGallery() {
     Get.to(() => GalleryPage());
@@ -46,7 +47,7 @@ class CameraPage extends StatelessWidget {
             CameraPreview(controller.cameraController!),
 
             // Mask Overlay
-            const CameraOverlay(),
+            widget,
 
             // Capture Button
             Positioned(
